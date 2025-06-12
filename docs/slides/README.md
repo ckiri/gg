@@ -1,20 +1,21 @@
-# Project slides for VAR-AI
+# Präsentationsfolien 
 
-[Marp](https://marp.app/) was used to create the slides.
-Add the assets directory inside the slides directory.
+Marp benötigt [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) um die Präsentationsfolien zu bauen.
+Das Command zum bauen ist im Makefile integriert.
 
-Build the slides as an html slide-show using `make`:
+Bauen der Präsentationsfolien `make`:
 ```sh
 make
 ```
 
-To generate a `.pdf` file run:
+Präsentationsfolien als `.pdf`:
 ```sh
 make pdf
 ```
 
-To build both use:
+Beides (PDF & HTML):
 ```sh
 make all
 ```
 
+Für Lokale Verwendung der Präsentation einfach `slides.html` im Browser öffnen.
