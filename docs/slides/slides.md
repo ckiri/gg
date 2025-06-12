@@ -255,6 +255,7 @@ p { text-align: center; }
 
 - UN-Nummer Liste [https://de.wikipedia.org/wiki/Liste_der_UN-Nummern](https://de.wikipedia.org/wiki/Liste_der_UN-Nummern)
 - IATA [https://www.iata.org/](https://www.iata.org/)
+- Github Repository mit Notebook und Präsentation [https://github.com/ckiri/gg](https://github.com/ckiri/gg)
 
 <!--
 Bitte fehlende Quellen hinzufügen
