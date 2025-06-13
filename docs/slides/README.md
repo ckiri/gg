@@ -15,7 +15,7 @@ make pdf
 
 Beides (PDF & HTML):
 ```sh
-make all
+make pdf slides
 ```
 
 Für Lokale Verwendung der Präsentation einfach `slides.html` im Browser öffnen.
