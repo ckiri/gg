@@ -1,0 +1,61 @@
+name: Build and deploy slides
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Marp CLI and dependencies
+        run: |
+          npm install -g @marp-team/marp-cli
+
+      - name: Generate html from markdown
+        run: marp slides.md --html --output index.html
+
+      - name: Convert markdown to pdf
+        run: marp slides.md --pdf --output gg-stammdate-semesteraufgabe.pdf
+
+      - name: Upload PDF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GG Stammdaten Semesteraufgabe PDF
+          path: gg-stammdaten-semesteraufgabe.pdf
+          retention-days: 7
+
+      - name: Delete PDF
+        run: rm -r gg-stammdaten-semesteraufgabe.pdf
+
+      - name: Upload index.html for gh pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to gh pages
+        id: deployment
+        uses: actions/deploy-pages@v4
