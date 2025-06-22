@@ -78,9 +78,40 @@ header {
 | IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer        |
 | Klasse             | Gefahrgutklassen Unterteilt in 13 Klasen, mit Unterklassen (.2, .1) |
 | GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                   |
-| Verp. Methode See  |                                                                     |
+| Verp. Methode See  | Verpackungsmethode für Seefracht                                    |
 | GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association             |
-| Verp. Methode Luft |                                                                     |
+| Verp. Methode Luft | Verpackungsanforderung für Lufttransport                            |
+
+<!--
+-->
+
+----
+
+# Einführung Gefahrengut
+
+## Was ist Gefahrengut?
+
+- Gefahrgut bezeichnet Stoffe und Gegenstände, die beim Transport Risiken für Gesundheit, Umwelt oder Sicherheit darstellen.
+- Typische Beispiele: entzündbare Flüssigkeiten, explosive Stoffe, Gase, radioaktive Materialien.
+- Der Transport unterliegt internationalen Vorschriften wie IMDG (Seeweg), ADR (Straße) oder IATA (Luftverkehr).
+- Im ERP-System müssen solche Materialien korrekt klassifiziert, gekennzeichnet und mit Regeln verknüpft werden.
+
+<!--
+-->
+
+----
+
+# Einführung Gefahrengut – Probleme
+
+- Sehr lückenhafte und teils undurchsichtige IATA-Klassifizierungen
+- Unklarheiten: Stimmen **GG_Vorschrift Luft** und **Verpackungsmethode** (IATA-Bezeichnung/Nummer) überhaupt überein?
+- Unterschiedliche Verpackungsmethoden bei gleicher IATA-Nummer trotz gleichem Land → vermutlich abhängig von *Modulgruppe*
+
+## Ansatz zur Regelprüfung
+
+- Ermitteln von Abhängigkeiten zwischen Feldern
+- Filtern nach einzelnen oder ähnlichen Modulgruppen
+- Beispiele aus der Tabelle als Grundlage nutzen
 
 <!--
 -->
