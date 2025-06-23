@@ -9,7 +9,7 @@ style: |
     font-size: 16px;
   }
   code {
-    font-size: 22px;
+    font-size: 28px;
   }
   li, p, td, th {
     font-size: 26px;
@@ -282,11 +282,130 @@ Chris
 
 ----
  
-# Fehlererkennung & Behebung (KI)
+# Fehlererkennung & Behebung (KI) - Grundlogik
 
 <!--
 Berkan
 -->
+
+- Durch Analyse von Daten: **Distinct** anwenden auf **Material-Bezeichner**
+  - Reduktion von 12000+ Materialien auf ca. 3000 Materialien
+- Auf diese Materialien folgende Logik anwenden:
+  - Material-Bezeichner in ein LLM einlesen
+  - Output Format angeben, z.B. "Artikel_Identifikationsnummer, Identifikationsnummer, Klasse"
+  - Output letztlich ins Projekt wieder einfügen
+
+----
+
+# Fehlererkennung & Behebung (KI) - Automatisierung
+
+<!--
+Berkan
+-->
+
+- **Automatisierbar!** Unsere Schritte sind vorgegeben.
+- Ziel: Mit einer LLM-API, e.g. OpenAI-API die Frage **je Material** zu stellen
+    - Bei 3000+ Materialien notwendig, da man sonst Stundenlang prompts schreiben muss
+- Dazu ein Script, der für uns die Materialien einliest, bearbeitet und ausgibt
+
+----
+
+# Fehlererkennung & Behebung (KI) - Automatisierung
+
+<!--
+Berkan
+-->
+
+- Material-Bezeichner auf **Distincte**  Materialien verringern
+    - 'STG VST PARKSYS A-HIGH VAR2' existiert mehrmals, brauchen den Prompt aber nur 1x
+    - Kann einfach durch Excel manuell durchgeführt werden
+
+![height:400px](./assets/gg-ai-automate-input.png)
+
+----
+
+# Fehlererkennung & Behebung (KI) - Automatisierung
+
+<!--
+Berkan
+-->
+
+* In Python Inputdaten auslesen und ein prompt per Material für das LLM erstellen
+
+```Python
+def create_prompt(client, material: str) -> str:
+    response = client.responses.create(
+        model="gpt-4o-mini",
+        input=f'Gebe im format "{material},UN,UN-Nummer (Die Zahl, z.B. 1234),Klasse (z.B. 2.1)" an, ob es eine UN Nummer und Klasse für folgendes gibt: {material}\n'
+            f'Falls es keine UN Nummer gibt, gebe es so aus:\n'
+            f'\"{material},,,\"\n'
+            f'Behalte die Formatierung (Full caps bleibt full caps)'
+    )
+    return response.output_text
+```
+- Prompt soll hier im besten Fall Daten beispielsweise wie folgt ausgeben: `KRAFTSTOFFBEHAELTER VST,UN,1203,3`
+- Falls nichts gefunden wird: `KRAFTSTOFFBEHAELTER VST,,,`
+
+----
+
+# Fehlererkennung & Behebung (KI) - Automatisierung
+
+<!--
+Berkan
+-->
+
+* Loop um Materialien abzuspeichern
+
+```Python
+with open(input_path, "r", encoding="utf-8") as inputfile:
+    for raw_line in inputfile:
+        line = raw_line.rstrip("\r\n")
+        response = create_prompt(client, line)
+        with open(output_path, "a", encoding="utf-8") as outfile:
+            outfile.write(response + "\n")
+        print(f"Written Material {iterator} out of {lines}")
+        iterator += 1
+```
+* Letztlich Distincte Daten per Material-Bezeichner wieder in Excel auffüllen **(Skalieren)**
+* Kann gemacht werden durch auslesen von Rows in den Stammdaten,
+  beispielsweise: `if row_dict['Material_Bezeichner'] == {ai_material_ident_nr}` 
+    * Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
+        * `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
+
+----
+
+# Fehlererkennung & Behebung (KI) - Probleme
+
+<!--
+Berkan
+-->
+
+* LLM ist sehr unvorhersehbar
+* Prompt output nicht einheitlich
+    * Manuelle Analyse von ~3000 Zeilen benötigt
+* Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
+
+----
+
+# Fehlererkennung & Behebung (KI) - Probleme
+
+<!--
+Berkan
+-->
+
+![height:100px](./assets/gg-ai-fehler-1.png) ![height:100px](./assets/gg-ai-fehler-2.png)
+![height:200px](./assets/gg-ai-fehler-4.png) ![height:100px](./assets/gg-ai-fehler-3.png)
+
+----
+
+# Fehlererkennung & Behebung (KI) - Probleme
+
+<!--
+Berkan
+-->
+
+![height:100px](./assets/gg-ai-fehler-5.png) ![height:100px](./assets/gg-ai-fehler-6.png)
+![height:200px](./assets/gg-ai-fehler-7.png)
 
 ----
 
@@ -336,6 +455,8 @@ Berkan/Dominik
 
 - UN-Nummer Liste [https://de.wikipedia.org/wiki/Liste_der_UN-Nummern](https://de.wikipedia.org/wiki/Liste_der_UN-Nummern)
 - IATA [https://www.iata.org/](https://www.iata.org/)
+- OpenAI API [https://openai.com/api/](https://openai.com/api/)
+- OpenAI Python Wrapper [https://github.com/openai/openai-python](https://github.com/openai/openai-python)
 - Github Repository mit Notebook und Präsentation [https://github.com/ckiri/gg](https://github.com/ckiri/gg)
 
 <!--
