@@ -1,4 +1,6 @@
 ----
+
+marp: true
 math: katex
 header: Gefahrengut | ERP-Systeme | Agreš, Kiriakou, Koch, Nur
 paginate: false
@@ -11,6 +13,12 @@ style: |
   }
   li, p, td, th {
     font-size: 26px;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 30px;
   }
   .columns {
     display: flex;
@@ -52,44 +60,49 @@ header {
 }
 </style>
 
+<!--
+David
+-->
+
 ----
 
 # Gliederung
 
 1. Einführung Gefahrengut
-2. Bezeichnungsanalyse
-3. Fehlererkennung & Behebung (KI)
-4. Fehlererkennung & Behebung (ohne KI)
-8. Fazit 
+2. Manuelle Regelprüfung
+4. Automatische Prüfung (ohne KI)
+3. Fehlererkennung & Behebung mit KI
+5. Fehlererkennung mit ML
+6. Fazit 
 
 <!-- paginate: true -->
 
 <!--
+David
 -->
 
 ----
 
 # Einführung Gefahrengut
 
-| Bezeichnung        | Beschreibung                                                        |
-|--------------------|---------------------------------------------------------------------|
-| Landecode für GG   | z.B. CA = Kanada, HU = Ungarn                                       |
-| Art_IdentNr        | Einzige Art in Stammdaten = UN                                      |
-| IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer        |
-| Klasse             | Gefahrgutklassen Unterteilt in 13 Klasen, mit Unterklassen (.2, .1) |
-| GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                   |
-| Verp. Methode See  | Verpackungsmethode für Seefracht                                    |
-| GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association             |
-| Verp. Methode Luft | Verpackungsanforderung für Lufttransport                            |
+| Bezeichnung        | Beschreibung                                                         |
+|--------------------|----------------------------------------------------------------------|
+| Landecode für GG   | z.B. CA = Kanada, HU = Ungarn                                        |
+| Art_IdentNr        | Einzige Art in Stammdaten = UN                                       |
+| IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer         |
+| Klasse             | Gefahrgutklassen Unterteilt in 13 Klassen, mit Unterklassen (.2, .1) |
+| GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                    |
+| Verp. Methode See  | Verpackungsmethode für Seefracht                                     |
+| GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association              |
+| Verp. Methode Luft | Verpackungsanforderung für Lufttransport                             |
 
 <!--
+David
 -->
 
 ----
 
-# Einführung Gefahrengut
-
-## Was ist Gefahrengut?
+# Einführung Gefahrengut – Was ist Gefahrengut?
 
 - Gefahrgut bezeichnet Stoffe und Gegenstände, die beim Transport Risiken für Gesundheit, Umwelt oder Sicherheit darstellen.
 - Typische Beispiele: entzündbare Flüssigkeiten, explosive Stoffe, Gase, radioaktive Materialien.
@@ -97,28 +110,31 @@ header {
 - Im ERP-System müssen solche Materialien korrekt klassifiziert, gekennzeichnet und mit Regeln verknüpft werden.
 
 <!--
+David
 -->
 
 ----
 
-# Einführung Gefahrengut – Probleme
+# Einführung Gefahrengut – Probleme & Ansätze
 
+**Probleme**
 - Sehr lückenhafte und teils undurchsichtige IATA-Klassifizierungen
 - Unklarheiten: Stimmen **GG_Vorschrift Luft** und **Verpackungsmethode** (IATA-Bezeichnung/Nummer) überhaupt überein?
-- Unterschiedliche Verpackungsmethoden bei gleicher IATA-Nummer trotz gleichem Land → vermutlich abhängig von *Modulgruppe*
+- Unterschiedliche Verpackungsmethoden bei gleicher IATA-Nummer trotz gleichem Land
+  $\rightarrow$ vermutlich abhängig von *Modulgruppe*
 
-## Ansatz zur Regelprüfung
-
+**Ansatz zur Regelprüfung**
 - Ermitteln von Abhängigkeiten zwischen Feldern
 - Filtern nach einzelnen oder ähnlichen Modulgruppen
 - Beispiele aus der Tabelle als Grundlage nutzen
 
 <!--
+David
 -->
 
 ---- 
  
-# Bezeichnungsanalyse
+# Automatische Prüfung (ohne KI) – Bezeichnungsanalyse
 
 ![bg right:47% height:80% vertical](./assets/gg-top-50-words-masterdata.png)
 ![bg right:47% height:80%](./assets/gg-top-50-words-un-numbers.png)
@@ -128,11 +144,12 @@ header {
 - Für effizienteres Verarbeiten der Daten *Grundrauschen* entfernen
 
 <!--
+Chris
 -->
 
 ----
 
-# Bezeichnungsanalyse
+# Automatische Prüfung (ohne KI) – Bezeichnungsanalyse
 
 ![bg right:47% height:80% vertical](./assets/gg-top-50-words-masterdata-keywords.png)
 ![bg right:47% height:80%](./assets/gg-top-50-words-un-numbers-keywords.png)
@@ -159,11 +176,12 @@ def sanitize_text(text):
 ```
 
 <!--
+Chris
 -->
 
 ----
 
-# Bezeichnungsanalyse
+# Automatische Prüfung (ohne KI) – Bezeichnungsvergleich
 
 - Vergleichen jedes Schlüsselworts aus **'Material-Bezeichnung'** mit allen Schlüsselwörtern der UN-Nummern $\rightarrow$ festgestellt welche Zeilen welchen der UN-Nummern ähneln
 - Verfahren $m \times n$: schlechte Laufzeitkomplexität
@@ -177,18 +195,12 @@ p { text-align: center; }
 </style>
 
 <!--
--->
-
-----
- 
-# Fehlererkennung & Behebung (KI)
-
-<!--
+Chris
 -->
 
 ----
 
-# Fehlererkennung & Behebung (ohne KI)
+# Automatische Prüfung (ohne KI) & Fehlerbehebung
 
 - Erkennen von Unregemäßigkeiten:
     - Spalte **'Art_IdentNr'** prüfen ob Wert `UN` gesetzt
@@ -202,11 +214,12 @@ p { text-align: center; }
 </style>
 
 <!--
+Chris
 -->
 
 ----
 
-# Fehlererkennung & Behebung (ohne KI)
+# Automatische Prüfung (ohne KI) & Fehlerbehebung
 
 <div class="columns">
 <div>
@@ -247,11 +260,12 @@ for idx, row in group.iterrows():
 </div>
 
 <!--
+Chris
 -->
 
 ----
 
-# Fehlererkennung & Behebung (ohne KI)
+# Automatische Prüfung (ohne KI) & Fehlerbehebung
 
 - Zuordnung zu **1. Teilwort** funktioniert im Falle von Stoßdämpfern gut
 - Bei Aktuatoren z.B. "AKTUATOR SOUNDSYS" & "AKTUATOR PARKSPERRE" nicht:
@@ -265,43 +279,60 @@ p { text-align: center; }
 </style>
  
 <!--
+Chris
+-->
+
+----
+ 
+# Fehlererkennung & Behebung (KI)
+
+<!--
+Berkan
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+<!--
+Dominik
 -->
 
 ----
 
 # Fazit
-
-- KI generiert viele Fehler z.B. 'HINWEISSCHILD BATTERIE'
-- Ohne KI (Teilwortgruppierung) übersieht Kontext, daher auch Fehleranfällig
-- Mögliche Erweiterungen/Alternativen:
-    - Maschinelles Lernen, Klassifizierung (UN-Nummern als Label für **'Material-Bezeichnung'**)
-    - Für Klassifizierung werden aber korrekte Daten benötigt
-
-
-<!--
--->
-
-----
-
-# Fazit 
-
+ 
 **Manuelle Vorarbeit als Grundlage**  
-  - Bevor automatisierte Analysen möglich sind, ist intensive manuelle Vorarbeit nötig.  
-  - Beispiel: Prüfung der IATA-Klassifizierungen, Vergleich von Vorschriften & Verpackungsmethoden.
-
+- Bevor automatisierte Analysen möglich sind, ist intensive manuelle Vorarbeit nötig.  
+- Beispiel: Prüfung der IATA-Klassifizierungen, Vergleich von Vorschriften & Verpackungsmethoden.
+   
 **Verständnis der Datenstruktur ist unerlässlich**  
-  - Nur wer die Struktur und Logik der Tabelle versteht, kann sinnvolle Regeln entwickeln.  
-  - Dazu gehört auch das Erkennen von Abhängigkeiten (z. B. zwischen Modulgruppen und Verpackungsvorgaben).
-
-**KI-gestützte Ansätze brauchen eine solide Datenbasis**  
-  - KI kann erst effektiv arbeiten, wenn die Daten vorstrukturiert und bereinigt sind.  
-  - Tabellen müssen ergänzt, geprüft und KI mit erklärenden Informationen unterstützt werden.
-
+- Nur wer die Struktur und Logik der Tabelle versteht, kann sinnvolle Regeln entwickeln.  
+- Dazu gehört auch das Erkennen von Abhängigkeiten (z. B. zwischen Modulgruppen und Verpackungsvorgaben).
 
 <!--
+Berkan/Dominik
 -->
 
 ---- 
+
+# Fazit
+
+**KI-gestützte Ansätze brauchen eine solide Datenbasis**  
+- KI kann erst effektiv arbeiten, wenn die Daten vorstrukturiert und bereinigt sind.  
+- Tabellen müssen ergänzt, geprüft und KI mit erklärenden Informationen unterstützt werden.
+- KI generiert viele Fehler z.B. 'HINWEISSCHILD BATTERIE'
+- Ohne KI (Teilwortgruppierung) übersieht Kontext, daher auch Fehleranfällig
+ 
+**Mögliche Erweiterungen/Alternativen**
+- Maschinelles Lernen, Klassifizierung (UN-Nummern als Label für **'Material-Bezeichnung'**)
+- Für Klassifizierung werden aber korrekte Daten benötigt
+
+<!--
+Berkan/Dominik
+-->
+
+----
 
 # Quellen
 
