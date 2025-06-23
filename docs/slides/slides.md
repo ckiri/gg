@@ -268,15 +268,13 @@ Chris
 # Automatische Prüfung (ohne KI) & Fehlerbehebung
 
 - Zuordnung zu **1. Teilwort** funktioniert im Falle von Stoßdämpfern gut
-- Bei Aktuatoren z.B. "AKTUATOR SOUNDSYS" & "AKTUATOR PARKSPERRE" nicht:
-    - Soundsystem ist kein Gefahrengut
-    - **'IdentNr'** 3268 $\rightarrow$ *Airbag-Gasgeneratoren, pyrotechnisch oder Airbag-Module, pyrotechnisch oder Gurtstraffer, pyrotechnisch oder Sicherheitseinrichtungen, elektrische Auslösung*
+- Bei Aktuatoren z.B. "AKTUATOR SOUNDSYS" & "AKTUATOR PARKSPERRE"
+  $\rightarrow$ Soundsystem ist kein Gefahrengut!
+  
+**'IdentNr'** 3268:
+> Airbag-Gasgeneratoren, pyrotechnisch oder Airbag-Module, pyrotechnisch oder Gurtstraffer, pyrotechnisch oder Sicherheitseinrichtungen, elektrische Auslösung
  
 ![height:200px](./assets/gg-inconsistency-detection-correct.png)
-
-<style scoped>
-p { text-align: center; }
-</style>
  
 <!--
 Chris
