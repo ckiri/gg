@@ -282,7 +282,7 @@ Chris
 
 ----
  
-# Fehlererkennung & Behebung (KI) - Grundlogik
+# KI basierter Ansatz - Grundlogik
 
 <!--
 Berkan
@@ -297,7 +297,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Automatisierung
+# KI basierter Ansatz - Automatisierung
 
 <!--
 Berkan
@@ -310,7 +310,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Automatisierung
+# KI basierter Ansatz - Automatisierung
 
 <!--
 Berkan
@@ -324,7 +324,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Automatisierung
+# KI basierter Ansatz - Automatisierung
 
 <!--
 Berkan
@@ -348,7 +348,7 @@ def create_prompt(client, material: str) -> str:
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Automatisierung
+# KI basierter Ansatz - Automatisierung
 
 <!--
 Berkan
@@ -374,7 +374,7 @@ with open(input_path, "r", encoding="utf-8") as inputfile:
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Probleme
+# KI basierter Ansatz - Probleme
 
 <!--
 Berkan
@@ -387,7 +387,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Probleme
+# KI basierter Ansatz - Probleme
 
 <!--
 Berkan
@@ -398,7 +398,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung (KI) - Probleme
+# KI basierter Ansatz - Probleme
 
 <!--
 Berkan
