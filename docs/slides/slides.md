@@ -507,12 +507,13 @@ Berkan
 ## Zusammenfassung
 
 - Anwenden von Maschinellen Lernmodellen um Muster zu erkennen
-- Felder mit Fehlenden UN Nummern die ähnliche Muster verfolgen für Menschliche Bearbeitung Markieren
+- Felder mit fehlenden UN Nummern die ähnliche Muster verfolgen für menschliche Bearbeitung markieren
 - Schritte:
   - Daten vorbereiten für ML
   - Analyse der Daten
-  - ML Model Tranieren & "Prediction Probability" prüfen
+  - ML Model tranieren & "Prediction Probability" prüfen
   - High-Probability Werte extrahieren
+
 <!--
 Dominik
 -->
@@ -525,8 +526,8 @@ Dominik
 
 - Entfernen der Identifikation & Label Felder
 - Füllen der Lücken im Datensatz mit "MISSING"
-- Teilen der Daten auf Test- und Trainingssets für Spätere Training
-- Encoden der String Werte in ML-Interpretierbare Integer Werte
+- Teilen der Daten auf Test- und Trainingssets für das Training
+- Encoden der String-Values in ML interpretierbare Integer-Values
 
 <!--
 Dominik
@@ -539,9 +540,9 @@ Dominik
 ## Korrelation zwischen den Features
 
 - Wie korrelieren bestimmte Felder mit dem Feld "Art_IdentNr"?
-- Hohe Korrelation = Aussagekräftige Feature
+- Hohe Korrelation = Aussagekräftiges Feature
 
-![bg right:50% height:400px vertical](./assets/top10f_by_mutual_information.png)
+![bg right:55% height:400px vertical](./assets/top10f_by_mutual_information.png)
 
 <!--
 Dominik
@@ -586,8 +587,7 @@ Dominik
 
 ## Training von RandomForestClassifier Modell
 
-![height:400px width=50%](./assets/RF_predicted_probabilities.png)
-![right:50% height:400px width=50%](./assets/RF_confusion_matrix.png)
+![height:400px width=50%](./assets/RF_predicted_probabilities.png) ![right:50% height:400px width=50%](./assets/RF_confusion_matrix.png)
 
 <!--
 Dominik
@@ -599,12 +599,8 @@ Dominik
 
 ## Analyse - SHAP
 
-![height:400px](./assets/RF_SHAP_bar.png)
-![height:400px](./assets/RF_SHAP_force_chart_big.png)
-![height:400px](./assets/RF_SHAP_force_chart_small.png)
-
-
-
+![height:260px](./assets/RF_SHAP_force_chart_big.png)
+![height:260px](./assets/RF_SHAP_force_chart_small.png)
 
 <!--
 Dominik
@@ -614,9 +610,20 @@ Dominik
 
 # Fehlererkennung & Behebung ML
 
+![height:550px](./assets/RF_SHAP_bar.png)
+
+<style scoped>
+p { text-align: center; }
+</style>
+
+
+----
+
+# Fehlererkennung & Behebung ML
+
 ## Analyse - Ergebnisse
 
-- Gefundene Zeilen mit Prob > 80%: 27
+- 27 Gefundene Zeilen mit hoher Gewissheit
 
 ```csv
 ID-Nummer,Material-Bezeichnung,pred_prob_art
