@@ -9,7 +9,7 @@ style: |
     font-size: 16px;
   }
   code {
-    font-size: 28px;
+    font-size: 20px;
   }
   li, p, td, th {
     font-size: 26px;
@@ -312,39 +312,82 @@ Berkan
 
 # KI basierter Ansatz - Automatisierung
 
+<div class="columns">
+<div>
+
+Material-Bezeichner auf **Distinct** Materialien verringern:
+- 'STG VST PARKSYS A-HIGH VAR2' existiert mehrmals, brauchen den Prompt aber nur 1x
+- Kann einfach durch Excel manuell durchgeführt werden
+
+</div>
+<div>
+
+```
+REIFENVENTIL
+STECKERGEHAEUSE
+SCAUBSCHUTZKAPPE
+REIFEN 265/40 R19 102V XL ALL SEASON EXT
+REIFEN 265/35 ZR19 98Y XL MI
+REIFEN 255/40 R18 99Y XL CO
+REIFEN 255/35 R19 96Y XL PI
+REIFEN 225/50 R17 94Y MI
+REIFEN 225/50 R17 94Y EXTENDED BS
+REIFEN 235/55 R18 100W EXTENDED BS
+REIFEN 245/45 R17 99Y XL MI
+REIFEN 255/40 ZR20 101Y XL MI
+VENTILMUTTER
+REIFEN 225/45 R18 95Y XL EXTENDED BS
+REIFEN 235/55 R18 100W EXTENDED PI
+REIFEN 275/40 R19 105V XL ALL SEASON EXT
+REIFEN 255/35 R19 96Y XL GY
+GUMMILAGER
+TANKDECKEL
+EINSPRITZDUESE REDUKTIONSADDITIV
+DICHTRING. SONDERFORM
+KUEHLMITTELPUMPE
+```
+
+</div>
+
 <!--
 Berkan
 -->
-
-- Material-Bezeichner auf **Distincte**  Materialien verringern
-    - 'STG VST PARKSYS A-HIGH VAR2' existiert mehrmals, brauchen den Prompt aber nur 1x
-    - Kann einfach durch Excel manuell durchgeführt werden
-
-![height:400px](./assets/gg-ai-automate-input.png)
 
 ----
 
 # KI basierter Ansatz - Automatisierung
 
-<!--
-Berkan
--->
 
-* In Python Inputdaten auslesen und ein prompt per Material für das LLM erstellen
+<div class="columns">
+<div>
+
+- In Python Inputdaten auslesen und ein prompt per Material für das LLM erstellen
+- Prompt soll hier im besten Fall Daten beispielsweise wie folgt ausgeben: `KRAFTSTOFFBEHAELTER VST,UN,1203,3`
+- Falls nichts gefunden wird: `KRAFTSTOFFBEHAELTER VST,,,`
+
+</div>
+<div>
 
 ```Python
 def create_prompt(client, material: str) -> str:
     response = client.responses.create(
         model="gpt-4o-mini",
-        input=f'Gebe im format "{material},UN,UN-Nummer (Die Zahl, z.B. 1234),Klasse (z.B. 2.1)" an, ob es eine UN Nummer und Klasse für folgendes gibt: {material}\n'
+        input=
+            f'Gebe im format'
+            f'"{material},UN,UN-Nummer (Die Zahl, z.B. 1234),Klasse (z.B. 2.1)"'
+            f'an, es eine UN Nummer und Klasse für folgendes gibt: {material}\n'
             f'Falls es keine UN Nummer gibt, gebe es so aus:\n'
             f'\"{material},,,\"\n'
             f'Behalte die Formatierung (Full caps bleibt full caps)'
     )
     return response.output_text
 ```
-- Prompt soll hier im besten Fall Daten beispielsweise wie folgt ausgeben: `KRAFTSTOFFBEHAELTER VST,UN,1203,3`
-- Falls nichts gefunden wird: `KRAFTSTOFFBEHAELTER VST,,,`
+
+<div>
+
+<!--
+Berkan
+-->
 
 ----
 
@@ -389,23 +432,72 @@ Berkan
 
 # KI basierter Ansatz - Probleme
 
+<div class="columns">
+<div>
+
+```csv
+EIFEN HL 255/35 R19 99W
+OELSPRITZDUESE RE,,,"
+```
+
+```csv
+INPULSRING,,,
+"STG VST DBE ASHD NOTRUF IRS,,,"
+ABSORBER OB VO LT
+```
+
+```csv
+HALTER PARKSYS,,,
+"WARTUNGSDECKEL VST,,,,,"
+```
+
+</div>
+<div>
+
+```csv
+SCHUTZWAND HI LI,,,
+"ABSCHIRMPLATTE,,,,"
+```
+
+```csv
+EINLAGE STAUFACH,,,
+VERSTAERKING OB LI SCHARNIER,,,
+KONSOLE VO RE DACH HALTEGRIFF,,,
+```
+
+</div>
+
 <!--
 Berkan
 -->
-
-![height:100px](./assets/gg-ai-fehler-1.png) ![height:100px](./assets/gg-ai-fehler-2.png)
-![height:200px](./assets/gg-ai-fehler-4.png) ![height:100px](./assets/gg-ai-fehler-3.png)
 
 ----
 
 # KI basierter Ansatz - Probleme
 
+```csv
+ABDECKBLENDE RL,,,
+NOCKENWELLENLAGERDECKEL OB,,,
+Es gibt keien UN NUMMER und Klasse dafür.
+Bitte teile mir mit, welche MUTTER. DONDERFORM du meinst, damit ich die INformationen bereitstellen kann.
+```
+
+```csv
+TRAEGEPLATTE RE,,,
+
+ES gibt keien spezifische UN-NUmmer oder Klasse für "TRAEGERPLATTE RE".
+SICHERHEITSGURT LI 3.SITZREIHE,,,"
+ANSCHLAGPLATTE RE,,,
+
+Es gibt keine spezifische UN-Nummer oder Klasse für "ANSCHLAGPLATTE RE".
+SCHALTERBLOCK LICHTSCHALTER EPS,,,
+ABDECKUNG INSTRUMENTENTAFEL OB LL MAUTER,,,
+KETTENKASTENDECKEL,,,
+```
+
 <!--
 Berkan
 -->
-
-![height:100px](./assets/gg-ai-fehler-5.png) ![height:100px](./assets/gg-ai-fehler-6.png)
-![height:200px](./assets/gg-ai-fehler-7.png)
 
 ----
 
