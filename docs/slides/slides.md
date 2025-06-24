@@ -292,7 +292,7 @@ Berkan
   - Reduktion von 12000+ Materialien auf ca. 3000 Materialien
 - Auf diese Materialien folgende Logik anwenden:
   - Material-Bezeichner in ein LLM einlesen
-  - Output Format angeben, z.B. "Artikel_Identifikationsnummer, Identifikationsnummer, Klasse"
+  - Output Format angeben, z.B. "Art_Identifikationsnummer, Identifikationsnummer, Klasse"
   - Output letztlich ins Projekt wieder einfügen
 
 ----
@@ -394,7 +394,7 @@ Berkan
 # KI basierter Ansatz - Automatisierung
 
 
-* Loop um Materialien abzuspeichern
+- Loop um Materialien abzuspeichern
 
 ```Python
 with open(input_path, "r", encoding="utf-8") as inputfile:
@@ -406,11 +406,11 @@ with open(input_path, "r", encoding="utf-8") as inputfile:
         print(f"Written Material {iterator} out of {lines}")
         iterator += 1
 ```
-* Letztlich Distincte Daten per Material-Bezeichner wieder in Excel auffüllen **(Skalieren)**
-* Kann gemacht werden durch auslesen von Rows in den Stammdaten,
-  beispielsweise: `if row_dict['Material_Bezeichner'] == {ai_material_ident_nr}` 
-    * Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
-        * `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
+- Letztlich Distincte Daten per Material-Bezeichner wieder in Excel auffüllen **(Skalieren)**
+- Kann gemacht werden durch auslesen von Rows in den Stammdaten,
+  beispielsweise: `if row_dict['Material_Bezeichner'] == {ai_material_bezeichner}` 
+    - Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
+        - `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
 
 <!--
 Berkan
@@ -420,10 +420,10 @@ Berkan
 
 # KI basierter Ansatz - Probleme
 
-* LLM ist sehr unvorhersehbar
-* Prompt output nicht einheitlich
-    * Manuelle Analyse von ~3000 Zeilen benötigt
-* Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
+- LLM ist sehr unvorhersehbar
+- Prompt output nicht einheitlich
+    - Manuelle Analyse von ~3000 Zeilen benötigt
+- Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
 
 <!--
 Berkan
