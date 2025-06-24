@@ -69,11 +69,10 @@ David
 # Gliederung
 
 1. Einführung Gefahrengut
-2. Manuelle Regelprüfung
-4. Automatische Prüfung (ohne KI)
+2. Automatische Prüfung (ohne KI)
 3. KI basierter Ansatz
-5. Fehlererkennung mit ML
-6. Fazit 
+4. Fehlererkennung mit ML
+5. Fazit 
 
 <!-- paginate: true -->
 
