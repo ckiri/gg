@@ -292,7 +292,7 @@ Berkan
   - Reduktion von 12000+ Materialien auf ca. 3000 Materialien
 - Auf diese Materialien folgende Logik anwenden:
   - Material-Bezeichner in ein LLM einlesen
-  - Output Format angeben, z.B. "Artikel_Identifikationsnummer, Identifikationsnummer, Klasse"
+  - Output Format angeben, z.B. "Art_Identifikationsnummer, Identifikationsnummer, Klasse"
   - Output letztlich ins Projekt wieder einfügen
 
 ----
