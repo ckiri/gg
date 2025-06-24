@@ -658,41 +658,6 @@ Dominik
 
 ----
 
-# Fazit
- 
-**Manuelle Vorarbeit als Grundlage**  
-- Bevor automatisierte Analysen möglich sind, ist intensive manuelle Vorarbeit nötig.  
-- Beispiel: Prüfung der IATA-Klassifizierungen, Vergleich von Vorschriften & Verpackungsmethoden.
-   
-**Verständnis der Datenstruktur ist unerlässlich**  
-- Nur wer die Struktur und Logik der Tabelle versteht, kann sinnvolle Regeln entwickeln.  
-- Dazu gehört auch das Erkennen von Abhängigkeiten (z. B. zwischen Modulgruppen und Verpackungsvorgaben).
-
-<!--
-Berkan/Dominik
--->
-
----- 
-
-# Fazit
-
-**KI-gestützte Ansätze brauchen eine solide Datenbasis**  
-- KI kann erst effektiv arbeiten, wenn die Daten vorstrukturiert und bereinigt sind.  
-- Tabellen müssen ergänzt, geprüft und KI mit erklärenden Informationen unterstützt werden.
-- KI generiert viele Fehler z.B. 'HINWEISSCHILD BATTERIE'
-- KI & ML benötigen menschliche Intervention und Überprüfung
-- Ohne KI (Teilwortgruppierung) übersieht Kontext, daher auch Fehleranfällig
- 
-**Mögliche Erweiterungen/Alternativen**
-- Maschinelles Lernen, Klassifizierung (UN-Nummern als Label für **'Material-Bezeichnung'**)
-- Für Klassifizierung werden aber korrekte Daten benötigt
-
-<!--
-Berkan/Dominik
--->
-
-----
-
 # Quellen
 
 - UN-Nummer Liste [https://de.wikipedia.org/wiki/Liste_der_UN-Nummern](https://de.wikipedia.org/wiki/Liste_der_UN-Nummern)
