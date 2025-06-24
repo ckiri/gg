@@ -89,7 +89,7 @@ David
 | Landecode für GG   | z.B. CA = Kanada, HU = Ungarn                                        |
 | Art_IdentNr        | Einzige Art in Stammdaten = UN                                       |
 | IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer         |
-| Klasse             | Gefahrgutklassen Unterteilt in 13 Klassen, mit Unterklassen (.2, .1) |
+| Klasse             | Gefahrgutklassen Unterteilt in 9 Klassen, mit Unterklassen (.2, .1)  |
 | GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                    |
 | Verp. Methode See  | Verpackungsmethode für Seefracht                                     |
 | GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association              |
@@ -107,6 +107,15 @@ David
 - Typische Beispiele: entzündbare Flüssigkeiten, explosive Stoffe, Gase, radioaktive Materialien.
 - Der Transport unterliegt internationalen Vorschriften wie IMDG (Seeweg), ADR (Straße) oder IATA (Luftverkehr).
 - Im ERP-System müssen solche Materialien korrekt klassifiziert, gekennzeichnet und mit Regeln verknüpft werden.
+
+<!--
+David
+-->
+
+----
+
+![bg auto](./assets/gg-dangerous-shields.png)
+
 
 <!--
 David
@@ -291,7 +300,7 @@ Berkan
   - Reduktion von 12000+ Materialien auf ca. 3000 Materialien
 - Auf diese Materialien folgende Logik anwenden:
   - Material-Bezeichner in ein LLM einlesen
-  - Output Format angeben, z.B. "Artikel_Identifikationsnummer, Identifikationsnummer, Klasse"
+  - Output Format angeben, z.B. "Art_Identifikationsnummer, Identifikationsnummer, Klasse"
   - Output letztlich ins Projekt wieder einfügen
 
 ----
@@ -393,7 +402,7 @@ Berkan
 # KI basierter Ansatz - Automatisierung
 
 
-* Loop um Materialien abzuspeichern
+- Loop um Materialien abzuspeichern
 
 ```Python
 with open(input_path, "r", encoding="utf-8") as inputfile:
@@ -405,11 +414,11 @@ with open(input_path, "r", encoding="utf-8") as inputfile:
         print(f"Written Material {iterator} out of {lines}")
         iterator += 1
 ```
-* Letztlich Distincte Daten per Material-Bezeichner wieder in Excel auffüllen **(Skalieren)**
-* Kann gemacht werden durch auslesen von Rows in den Stammdaten,
-  beispielsweise: `if row_dict['Material_Bezeichner'] == {ai_material_ident_nr}` 
-    * Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
-        * `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
+- Letztlich Distincte Daten per Material-Bezeichner wieder in Excel auffüllen **(Skalieren)**
+- Kann gemacht werden durch auslesen von Rows in den Stammdaten,
+  beispielsweise: `if row_dict['Material_Bezeichner'] == {ai_material_bezeichner}` 
+    - Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
+        - `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
 
 <!--
 Berkan
@@ -419,10 +428,10 @@ Berkan
 
 # KI basierter Ansatz - Probleme
 
-* LLM ist sehr unvorhersehbar
-* Prompt output nicht einheitlich
-    * Manuelle Analyse von ~3000 Zeilen benötigt
-* Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
+- LLM ist sehr unvorhersehbar
+- Prompt output nicht einheitlich
+    - Manuelle Analyse von ~3000 Zeilen benötigt
+- Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
 
 <!--
 Berkan
@@ -502,6 +511,146 @@ Berkan
 ----
 
 # Fehlererkennung & Behebung ML
+
+## Zusammenfassung
+
+- Anwenden von Maschinellen Lernmodellen um Muster zu erkennen
+- Felder mit fehlenden UN Nummern die ähnliche Muster verfolgen für menschliche Bearbeitung markieren
+- Schritte:
+  - Daten vorbereiten für ML
+  - Analyse der Daten
+  - ML Model tranieren & "Prediction Probability" prüfen
+  - High-Probability Werte extrahieren
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Preprocessing
+
+- Entfernen der Identifikation & Label Felder
+- Füllen der Lücken im Datensatz mit "MISSING"
+- Teilen der Daten auf Test- und Trainingssets für das Training
+- Encoden der String-Values in ML interpretierbare Integer-Values
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Korrelation zwischen den Features
+
+- Wie korrelieren bestimmte Felder mit dem Feld "Art_IdentNr"?
+- Hohe Korrelation = Aussagekräftiges Feature
+
+![bg right:55% height:400px vertical](./assets/top10f_by_mutual_information.png)
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Training von RandomForestClassifier Modell
+
+```python
+# RF
+rf = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+rf.fit(X_train, y_train)
+
+## Predict probabilites werden auf die X_val Daten angewendet
+probs = rf.predict_proba(X_val)[:,1]
+
+## Treshold berechnen aus der precision-recall-Kurve
+prec, rec, thresh = precision_recall_curve(y_val, probs)
+
+## Bestimmung des Tresholds für eine gewünschte Präzision
+target_prec = 0.80
+candidates = np.where(prec[1:] >= target_prec)[0]
+if len(candidates):
+    chosen_idx = candidates[0]
+    chosen_thresh = thresh[chosen_idx]
+    print(f"Using threshold = {chosen_thresh:.3f} for ≥ {target_prec*100:.0f}% precision")
+else:
+    chosen_thresh = 0.5
+    print(f"Couldn't find {target_prec}% precision; defaulting to 0.5")
+```
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Training von RandomForestClassifier Modell
+
+![height:400px width=50%](./assets/RF_predicted_probabilities.png) ![right:50% height:400px width=50%](./assets/RF_confusion_matrix.png)
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Analyse - SHAP
+
+![height:260px](./assets/RF_SHAP_force_chart_big.png)
+![height:260px](./assets/RF_SHAP_force_chart_small.png)
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+![height:550px](./assets/RF_SHAP_bar.png)
+
+<style scoped>
+p { text-align: center; }
+</style>
+
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Analyse - Ergebnisse
+
+- 27 Gefundene Zeilen mit hoher Gewissheit
+
+```csv
+ID-Nummer,Material-Bezeichnung,pred_prob_art
+30412784,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.105
+30447516,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.08
+30441645,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.075
+30444849,2-KOMPONENTEN-KLEBSTOFFHAERTER,0.06
+30438259,STG VST TABLET-PC COMAND-CENTER CHN,0.06
+30438257,STG VST TABLET-PC COMAND-CENTER,0.045
+30444849,2-KOMPONENTEN-KLEBSTOFFHAERTER,0.04
+30414759,STG VST ALARMSIRENE,0.04
+30411471,MONTAGEOEL / P80 DBL 8600.70,0.035
+30411336,KLEBSTOFF,0.035
+30433723,PRODUKTSCHUTZFOLIE,0.035
+30335092,GERAEUSCHISOLIERUNG,0.035
+30381263,KLEBSTOFF,0.03
+30416445,KLEBSTOFF,0.025
+30441565,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.025
+```
 
 <!--
 Dominik
