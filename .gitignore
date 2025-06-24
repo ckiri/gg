@@ -2,3 +2,4 @@ data/*
 notebooks/.ipynb_checkpoints/*
 docs/slides/*.html
 docs/slides/*.pdf
+daten_zur_stammdatenpruefung.xlsx
