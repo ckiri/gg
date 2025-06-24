@@ -504,6 +504,139 @@ Berkan
 
 # Fehlererkennung & Behebung ML
 
+## Zusammenfassung
+
+- Anwenden von Maschinellen Lernmodellen um Muster zu erkennen
+- Felder mit Fehlenden UN Nummern die ähnliche Muster verfolgen für Menschliche Bearbeitung Markieren
+- Schritte:
+  - Daten vorbereiten für ML
+  - Analyse der Daten
+  - ML Model Tranieren & "Prediction Probability" prüfen
+  - High-Probability Werte extrahieren
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Preprocessing
+
+- Entfernen der Identifikation & Label Felder
+- Füllen der Lücken im Datensatz mit "MISSING"
+- Teilen der Daten auf Test- und Trainingssets für Spätere Training
+- Encoden der String Werte in ML-Interpretierbare Integer Werte
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Korrelation zwischen den Features
+
+- Wie korrelieren bestimmte Felder mit dem Feld "Art_IdentNr"?
+- Hohe Korrelation = Aussagekräftige Feature
+
+![bg right:50% height:400px vertical](./assets/top10f_by_mutual_information.png)
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Training von RandomForestClassifier Modell
+
+```python
+# RF
+rf = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+rf.fit(X_train, y_train)
+
+## Predict probabilites werden auf die X_val Daten angewendet
+probs = rf.predict_proba(X_val)[:,1]
+
+## Treshold berechnen aus der precision-recall-Kurve
+prec, rec, thresh = precision_recall_curve(y_val, probs)
+
+## Bestimmung des Tresholds für eine gewünschte Präzision
+target_prec = 0.80
+candidates = np.where(prec[1:] >= target_prec)[0]
+if len(candidates):
+    chosen_idx = candidates[0]
+    chosen_thresh = thresh[chosen_idx]
+    print(f"Using threshold = {chosen_thresh:.3f} for ≥ {target_prec*100:.0f}% precision")
+else:
+    chosen_thresh = 0.5
+    print(f"Couldn't find {target_prec}% precision; defaulting to 0.5")
+```
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Training von RandomForestClassifier Modell
+
+![height:400px width=50%](./assets/RF_predicted_probabilities.png)
+![right:50% height:400px width=50%](./assets/RF_confusion_matrix.png)
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Analyse - SHAP
+
+![height:400px](./assets/RF_SHAP_bar.png)
+![height:400px](./assets/RF_SHAP_force_chart_big.png)
+![height:400px](./assets/RF_SHAP_force_chart_small.png)
+
+
+
+
+<!--
+Dominik
+-->
+
+----
+
+# Fehlererkennung & Behebung ML
+
+## Analyse - Ergebnisse
+
+- Gefundene Zeilen mit Prob > 80%: 27
+
+```csv
+ID-Nummer,Material-Bezeichnung,pred_prob_art
+30412784,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.105
+30447516,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.08
+30441645,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.075
+30444849,2-KOMPONENTEN-KLEBSTOFFHAERTER,0.06
+30438259,STG VST TABLET-PC COMAND-CENTER CHN,0.06
+30438257,STG VST TABLET-PC COMAND-CENTER,0.045
+30444849,2-KOMPONENTEN-KLEBSTOFFHAERTER,0.04
+30414759,STG VST ALARMSIRENE,0.04
+30411471,MONTAGEOEL / P80 DBL 8600.70,0.035
+30411336,KLEBSTOFF,0.035
+30433723,PRODUKTSCHUTZFOLIE,0.035
+30335092,GERAEUSCHISOLIERUNG,0.035
+30381263,KLEBSTOFF,0.03
+30416445,KLEBSTOFF,0.025
+30441565,BATTERIE MBN 10307-12V 1.2AH AGM UP,0.025
+```
+
 <!--
 Dominik
 -->
@@ -532,6 +665,7 @@ Berkan/Dominik
 - KI kann erst effektiv arbeiten, wenn die Daten vorstrukturiert und bereinigt sind.  
 - Tabellen müssen ergänzt, geprüft und KI mit erklärenden Informationen unterstützt werden.
 - KI generiert viele Fehler z.B. 'HINWEISSCHILD BATTERIE'
+- KI & ML benötigen menschliche Intervention und Überprüfung
 - Ohne KI (Teilwortgruppierung) übersieht Kontext, daher auch Fehleranfällig
  
 **Mögliche Erweiterungen/Alternativen**
