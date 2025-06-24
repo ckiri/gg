@@ -71,7 +71,7 @@ David
 1. Einführung Gefahrengut
 2. Manuelle Regelprüfung
 4. Automatische Prüfung (ohne KI)
-3. Fehlererkennung & Behebung mit KI
+3. KI basierter Ansatz
 5. Fehlererkennung mit ML
 6. Fazit 
 
@@ -393,9 +393,6 @@ Berkan
 
 # KI basierter Ansatz - Automatisierung
 
-<!--
-Berkan
--->
 
 * Loop um Materialien abzuspeichern
 
@@ -415,18 +412,22 @@ with open(input_path, "r", encoding="utf-8") as inputfile:
     * Falls unser Material Bezeichner gleich ist mit dem Material_Bezeichner in den Stammdaten:
         * `row_dict['Art_IdentNr'] = {ai_material_ident_nr}` usw.
 
-----
-
-# KI basierter Ansatz - Probleme
-
 <!--
 Berkan
 -->
+
+----
+
+# KI basierter Ansatz - Probleme
 
 * LLM ist sehr unvorhersehbar
 * Prompt output nicht einheitlich
     * Manuelle Analyse von ~3000 Zeilen benötigt
 * Trotz klügerem Modell (o4), trotzdem keine gute Gefahrgutanalyse
+
+<!--
+Berkan
+-->
 
 ----
 
