@@ -101,7 +101,7 @@ David
 
 ----
 
-# Einführung Gefahrengut – Was ist Gefahrengut?
+# Einführung Gefahrengut ─ Was ist Gefahrengut?
 
 - Gefahrgut bezeichnet Stoffe und Gegenstände, die beim Transport Risiken für Gesundheit, Umwelt oder Sicherheit darstellen.
 - Typische Beispiele: entzündbare Flüssigkeiten, explosive Stoffe, Gase, radioaktive Materialien.
@@ -123,7 +123,7 @@ David
 
 ----
 
-# Einführung Gefahrengut – Probleme & Ansätze
+# Einführung Gefahrengut ─ Probleme & Ansätze
 
 **Probleme**
 - Sehr lückenhafte und teils undurchsichtige IATA-Klassifizierungen
@@ -142,7 +142,7 @@ David
 
 ---- 
  
-# Automatische Prüfung (ohne KI) – Bezeichnungsanalyse
+# Automatische Prüfung ─ Bezeichnungsanalyse
 
 ![bg right:47% height:80% vertical](./assets/gg-top-50-words-masterdata.png)
 ![bg right:47% height:80%](./assets/gg-top-50-words-un-numbers.png)
@@ -157,7 +157,7 @@ Chris
 
 ----
 
-# Automatische Prüfung (ohne KI) – Bezeichnungsanalyse
+# Automatische Prüfung ─ Bezeichnungsanalyse
 
 ![bg right:47% height:80% vertical](./assets/gg-top-50-words-masterdata-keywords.png)
 ![bg right:47% height:80%](./assets/gg-top-50-words-un-numbers-keywords.png)
@@ -189,7 +189,7 @@ Chris
 
 ----
 
-# Automatische Prüfung (ohne KI) – Bezeichnungsvergleich
+# Automatische Prüfung ─ Bezeichnungsvergleich
 
 - Vergleichen jedes Schlüsselworts aus **'Material-Bezeichnung'** mit allen Schlüsselwörtern der UN-Nummern $\rightarrow$ festgestellt welche Zeilen welchen der UN-Nummern ähneln
 - Verfahren $m \times n$: schlechte Laufzeitkomplexität
@@ -208,7 +208,7 @@ Chris
 
 ----
 
-# Automatische Prüfung (ohne KI) & Fehlerbehebung
+# Automatische Prüfung ─ Erkennung Unregemäßigkeiten
 
 - Erkennen von Unregemäßigkeiten:
     - Spalte **'Art_IdentNr'** prüfen ob Wert `UN` gesetzt
@@ -227,7 +227,7 @@ Chris
 
 ----
 
-# Automatische Prüfung (ohne KI) & Fehlerbehebung
+# Automatische Prüfung ─ Fehlerbehebung
 
 <div class="columns">
 <div>
@@ -290,7 +290,7 @@ Chris
 
 ----
  
-# KI basierter Ansatz - Grundlogik
+# KI basierter Ansatz ─ Grundlogik
 
 <!--
 Berkan
@@ -305,7 +305,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Automatisierung
+# KI basierter Ansatz ─ Automatisierung
 
 <!--
 Berkan
@@ -318,7 +318,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Automatisierung
+# KI basierter Ansatz ─ Automatisierung
 
 <div class="columns">
 <div>
@@ -363,7 +363,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Automatisierung
+# KI basierter Ansatz ─ Automatisierung
 
 
 <div class="columns">
@@ -399,7 +399,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Automatisierung
+# KI basierter Ansatz ─ Automatisierung
 
 
 - Loop um Materialien abzuspeichern
@@ -426,7 +426,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Probleme
+# KI basierter Ansatz ─ Probleme
 
 - LLM ist sehr unvorhersehbar
 - Prompt output nicht einheitlich
@@ -439,7 +439,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Probleme
+# KI basierter Ansatz ─ Probleme
 
 <div class="columns">
 <div>
@@ -482,7 +482,7 @@ Berkan
 
 ----
 
-# KI basierter Ansatz - Probleme
+# KI basierter Ansatz ─ Probleme
 
 ```csv
 ABDECKBLENDE RL,,,
@@ -510,7 +510,7 @@ Berkan
 
 ----
 
-# Fehlererkennung & Behebung ML
+# Fehlererkennung mit ML
 
 ## Zusammenfassung
 
@@ -528,9 +528,7 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
-
-## Preprocessing
+# Fehlererkennung mit ML ─ Preprocessing
 
 - Entfernen der Identifikation & Label Felder
 - Füllen der Lücken im Datensatz mit "MISSING"
@@ -543,10 +541,9 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
+# Fehlererkennung mit ML
 
-## Korrelation zwischen den Features
-
+**Korrelation zw. Features**:
 - Wie korrelieren bestimmte Felder mit dem Feld "Art_IdentNr"?
 - Hohe Korrelation = Aussagekräftiges Feature
 
@@ -558,9 +555,7 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
-
-## Training von RandomForestClassifier Modell
+# Fehlererkennung mit ML ─ Training RandomForestClassifier
 
 ```python
 # RF
@@ -591,11 +586,13 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
-
-## Training von RandomForestClassifier Modell
+# Fehlererkennung mit ML ─ Training RandomForestClassifier
 
 ![height:400px width=50%](./assets/RF_predicted_probabilities.png) ![right:50% height:400px width=50%](./assets/RF_confusion_matrix.png)
+
+<style scoped>
+p { text-align: center; }
+</style>
 
 <!--
 Dominik
@@ -603,9 +600,7 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
-
-## Analyse - SHAP
+# Fehlererkennung mit ML ─ SHAP-Analyse 
 
 ![height:260px](./assets/RF_SHAP_force_chart_big.png)
 ![height:260px](./assets/RF_SHAP_force_chart_small.png)
@@ -616,7 +611,7 @@ Dominik
 
 ----
 
-# Fehlererkennung & Behebung ML
+# Fehlererkennung mit ML ─ SHAP-Analyse
 
 ![height:550px](./assets/RF_SHAP_bar.png)
 
@@ -624,14 +619,11 @@ Dominik
 p { text-align: center; }
 </style>
 
-
 ----
 
-# Fehlererkennung & Behebung ML
+# Fehlererkennung mit ML ─ Ergebnissanalyse
 
-## Analyse - Ergebnisse
-
-- 27 Gefundene Zeilen mit hoher Gewissheit
+27 Gefundene Zeilen mit hoher Gewissheit:
 
 ```csv
 ID-Nummer,Material-Bezeichnung,pred_prob_art
