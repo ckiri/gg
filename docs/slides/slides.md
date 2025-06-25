@@ -72,28 +72,8 @@ David
 2. Automatische Prüfung (ohne KI)
 3. KI basierter Ansatz
 4. Fehlererkennung mit ML
-5. Fazit 
 
 <!-- paginate: true -->
-
-<!--
-David
--->
-
-----
-
-# Einführung Gefahrengut
-
-| Bezeichnung        | Beschreibung                                                         |
-|--------------------|----------------------------------------------------------------------|
-| Landecode für GG   | z.B. CA = Kanada, HU = Ungarn                                        |
-| Art_IdentNr        | Einzige Art in Stammdaten = UN                                       |
-| IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer         |
-| Klasse             | Gefahrgutklassen Unterteilt in 9 Klassen, mit Unterklassen (.2, .1)  |
-| GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                    |
-| Verp. Methode See  | Verpackungsmethode für Seefracht                                     |
-| GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association              |
-| Verp. Methode Luft | Verpackungsanforderung für Lufttransport                             |
 
 <!--
 David
@@ -116,6 +96,25 @@ David
 
 ![bg auto](./assets/gg-dangerous-shields.png)
 
+
+<!--
+David
+-->
+
+----
+
+# Einführung Gefahrengut
+
+| Bezeichnung        | Beschreibung                                                         |
+|--------------------|----------------------------------------------------------------------|
+| Landecode für GG   | z.B. CA = Kanada, HU = Ungarn                                        |
+| Art_IdentNr        | Einzige Art in Stammdaten = UN                                       |
+| IdentNr            | UN-Nummern, Stoffnummern - jedes Gefahrengut hat eig. Nummer         |
+| Klasse             | Gefahrgutklassen Unterteilt in 9 Klassen, mit Unterklassen (.2, .1)  |
+| GG_Vorschrift See  | IMDG, International Maritime Dangerous Goods Code                    |
+| Verp. Methode See  | Verpackungsmethode für Seefracht                                     |
+| GG_Vorschrift Luft | IATA_C, IATA_P, International Air Transport Association              |
+| Verp. Methode Luft | Verpackungsanforderung für Lufttransport                             |
 
 <!--
 David
