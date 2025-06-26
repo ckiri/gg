@@ -1,4 +1,4 @@
-# GG Dokumentation
+# Dokumentation
 
 Die Dokumentation ist in LaTeX geschrieben.
 
@@ -26,5 +26,5 @@ mkdir build
 
 Generierung der Doku:
 ```sh
-pdflatex -output-directory=./build -jobname=$(REPORT_NAME) main.tex 
+pdflatex -output-directory=./build -jobname=masterdata-gg-report main.tex 
 ```
