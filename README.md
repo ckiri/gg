@@ -18,9 +18,8 @@ jupyter notebook`
 
 Präsentationsfolien: https://ckiri.github.io/gg
 
-Info zum Erstellen der Präsentationsfolien: [Slides README](./docs/slides/README.md)
+[Info](./docs/slides/README.md) zum Erstellen der Präsentationsfolien.
 
-## Autoren
+## Dokumentation
 
-* [Chris Kiriakou](https://github.com/ckiri)
-* [Skinny2905](https://github.com/Skinny2905)
+[Info](./docs/report/README.md) zum Erstellen der Dokumentation.
