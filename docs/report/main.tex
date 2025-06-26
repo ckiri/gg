@@ -4,9 +4,11 @@
 \usepackage{tocloft}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{inconsolata}
 \usepackage{amsmath} % for math notation
 \usepackage{listings} % for code blocks
 \usepackage{graphicx} % for images
+\graphicspath{ {../slides/assets/} }
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[german]{babel}
@@ -19,7 +21,13 @@
     basicstyle=\fontsize{10pt}{10pt}\selectfont\ttfamily, % set the font
     breaklines=true,      % Automatically break lines
     language=Python,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+             {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+             {ß}{{\ss}}1
 }
+\lstset{style=code}
 
 \begin{document}
 
