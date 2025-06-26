@@ -12,39 +12,49 @@
 \usepackage[german]{babel}
 \usepackage{datetime2}
 \DTMsetdatestyle{german}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{bibliography.bib}
 
 \lstdefinestyle{code}{
-  basicstyle=\fontsize{10pt}{10pt}\selectfont\ttfamily, % set the font
-  breaklines=true,      % Automatically break lines
-  language=Python,
+    basicstyle=\fontsize{10pt}{10pt}\selectfont\ttfamily, % set the font
+    breaklines=true,      % Automatically break lines
+    language=Python,
 }
 
 \begin{document}
-\pagenumbering{roman}
 
+\pagenumbering{roman}
 \input{content/titlepage}
 
 \newpage
 
-\setcounter{tocdepth}{2}
-\addcontentsline{toc}{section}{Inhaltsverzeichnis}
 \tableofcontents
+\setcounter{tocdepth}{2}
+
+\newpage
+\pagenumbering{arabic}
+
+\input{content/introduction}
 
 \newpage
 
-% \input{content/introduction_dangerous_goods}
+% David
+\input{content/introduction_dangerous_goods}
 
 \newpage
 
-% \input{content/automatic_error_detection}
+% Chris
+\input{content/automatic_error_detection}
 
 \newpage
 
-% \input{content/ai_based_approach}
+% Berkan
+\input{content/ai_based_approach}
 
 \newpage
 
-% \input{content/error_detection_with_ml}
+% Dominik
+\input{content/error_detection_with_ml}
 
 \newpage
 
@@ -53,7 +63,7 @@
 
 \newpage
 
-\addcontentsline{toc}{section}{Literature}
-%\printbibliography
+\addcontentsline{toc}{section}{Quellen}
+\printbibliography
 
 \end{document}
