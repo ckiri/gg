@@ -1,0 +1,59 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage{graphicx}
+\usepackage{tocloft}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsmath} % for math notation
+\usepackage{listings} % for code blocks
+\usepackage{graphicx} % for images
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{datetime2}
+\DTMsetdatestyle{german}
+
+\lstdefinestyle{code}{
+  basicstyle=\fontsize{10pt}{10pt}\selectfont\ttfamily, % set the font
+  breaklines=true,      % Automatically break lines
+  language=Python,
+}
+
+\begin{document}
+\pagenumbering{roman}
+
+\input{content/titlepage}
+
+\newpage
+
+\setcounter{tocdepth}{2}
+\addcontentsline{toc}{section}{Inhaltsverzeichnis}
+\tableofcontents
+
+\newpage
+
+% \input{content/introduction_dangerous_goods}
+
+\newpage
+
+% \input{content/automatic_error_detection}
+
+\newpage
+
+% \input{content/ai_based_approach}
+
+\newpage
+
+% \input{content/error_detection_with_ml}
+
+\newpage
+
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\listoffigures
+
+\newpage
+
+\addcontentsline{toc}{section}{Literature}
+%\printbibliography
+
+\end{document}
