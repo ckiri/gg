@@ -73,18 +73,18 @@ Hierzu haben wir eine ganz einfache Lesemethode.
 
 \begin{lstlisting}
 def main():
-        with open(input\_path, "r", encoding="utf-8") as inputfile:
-        lines = len(inputfile.readlines())
+    with open(input\_path, "r", encoding="utf-8") as inputfile:
+    lines = len(inputfile.readlines())
 \end{lstlisting}
 
 Diese Methode zeigt an, wie viele Daten wir verarbeiten müssen.
 Danach lesen wir diese Datei nochmals ein, aber diesmal zum verarbeiten:
 
 \begin{lstlisting}
-    with open(input\_path, "r", encoding="utf-8") as inputfile:
-        for raw\_line in inputfile:
-            line = raw\_line.rstrip("\r\n")
-            response = create\_prompt(client, line)
+with open(input\_path, "r", encoding="utf-8") as inputfile:
+    for raw\_line in inputfile:
+        line = raw\_line.rstrip("\r\n")
+        response = create\_prompt(client, line)
 \end{lstlisting}
 
 Hier ist die Grundlogik wie folgt: Wir lesen eine Zeile aus,
