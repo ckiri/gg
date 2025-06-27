@@ -17,7 +17,7 @@ Wenn man diese Column \textbf{Distinct} analysiert, kommt man in etwa auf
 
 Jetzt muss man tatsächlich nur noch den Material-Bezeichner in ein LLM einlesen,
 danach dem LLM Fragen, ob es ein Gefahrgut ist und falls ja, nach der
-\textbf{Art_IdentNr, IdentNr, Klasse} nachfragen.
+\textbf{Art\_IdentNr, IdentNr, Klasse} nachfragen.
 
 Das generierte Resultat kann dann somit zurück in die Stammdaten eingeführt werden.
 
@@ -73,7 +73,7 @@ Hierzu haben wir eine ganz einfache Lesemethode.
 
 \begin{lstlisting}
 def main():
-        with open(input_path, "r", encoding="utf-8") as inputfile:
+        with open(input\_path, "r", encoding="utf-8") as inputfile:
         lines = len(inputfile.readlines())
 \end{lstlisting}
 
@@ -81,22 +81,22 @@ Diese Methode zeigt an, wie viele Daten wir verarbeiten müssen.
 Danach lesen wir diese Datei nochmals ein, aber diesmal zum verarbeiten:
 
 \begin{lstlisting}
-    with open(input_path, "r", encoding="utf-8") as inputfile:
-        for raw_line in inputfile:
-            line = raw_line.rstrip("\r\n")
-            response = create_prompt(client, line)
+    with open(input\_path, "r", encoding="utf-8") as inputfile:
+        for raw\_line in inputfile:
+            line = raw\_line.rstrip("\r\n")
+            response = create\_prompt(client, line)
 \end{lstlisting}
 
 Hier ist die Grundlogik wie folgt: Wir lesen eine Zeile aus,
 danach erstellen wir ein Prompt für das LLM und warten auf eine Antwort.
 
-Aber wie schaut \textbf{create_prompt} überhaupt aus?
+Aber wie schaut \textbf{create\_prompt} überhaupt aus?
 Wir müssen dem LLM genau wie möglich erklären, was wir wollen.
 Sonst kann es zu starken abweichungen in den Resultaten kommen.
 Deswegen erklären wir dem LLM in der Methode, was wir genau möchten.
 
 \begin{lstlisting}
-def create_prompt(client, material: str) -> str:
+def create\_prompt(client, material: str) -> str:
     response = client.responses.create(
         model="gpt-4o-mini",
         input=f'Gebe im format "\{material\},UN,UN-Nummer (Die Zahl, z.B. 1234),Klasse (z.B. 2.1)" an,'
@@ -105,7 +105,7 @@ def create_prompt(client, material: str) -> str:
             f'\"\{material\},,,\"\n'
             f'Behalte die Formatierung (Full caps bleibt full caps)'
     )
-    return response.output_text
+    return response.output\_text
 \end{lstlisting}
 
 Wenn man den oberen Code Snippet betrachtet, benutzen wir den 4o-mini Modell.
@@ -125,8 +125,8 @@ Jetzt müssen wir die Daten abspeichern, sodass wir sie später in die Stammdate
 einführen können. Dafür kann man die eingebaute write Methode von Python nutzen:
 
 \begin{lstlisting}
-            with open(output_path, "a", encoding="utf-8") as outfile:
-                outfile.write(response + "\n")
+with open(output\_path, "a", encoding="utf-8") as outfile:
+    outfile.write(response + "\n")
 \end{lstlisting}
 
 Somit wäre unsere Schleife wie folgt:
