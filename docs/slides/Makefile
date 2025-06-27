@@ -3,7 +3,7 @@
 all: slides
 
 pdf: ./slides.md
-	npx @marp-team/marp-cli@latest ./slides.md -o ./slides.pdf
+	npx @marp-team/marp-cli@latest --allow-local-files ./slides.md -o ./slides.pdf
 
 slides: ./slides.md
 	npx @marp-team/marp-cli@latest ./slides.md -o ./slides.html
