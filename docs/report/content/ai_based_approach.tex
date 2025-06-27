@@ -1,2 +1,224 @@
 % Berkan
 \section{KI basierter Ansatz}
+\subsection{Grundlogik}
+
+In diesem Ansatz geht es Grundsätzlich um einen
+Large Language Modell (kurz LLM) basierten Ansatz.
+Da LLM's heutzutage sehr beliebt sind, haben wir uns auch entschieden,
+einen Ansatz zu entwickeln, der ein kluges LLM Modell nutzt um für uns
+Resultate zu generieren.
+
+Die gegebenen Stammdaten bestehen aus ca. 12000 Materialien.
+In den Columns gibt es eine Reihe, die \textbf{Material-Bezeichner} heißt.
+Dieser Column spricht uns am besten an, da wir vom Material am meisten erfahren.
+
+Wenn man diese Column \textbf{Distinct} analysiert, kommt man in etwa auf
+3000 einzigartige Materialien, die wir analysieren wollen.
+
+Jetzt muss man tatsächlich nur noch den Material-Bezeichner in ein LLM einlesen,
+danach dem LLM Fragen, ob es ein Gefahrgut ist und falls ja, nach der
+\textbf{Art\_IdentNr, IdentNr, Klasse} nachfragen.
+
+Das generierte Resultat kann dann somit zurück in die Stammdaten eingeführt werden.
+
+\subsection{Automatisierung}
+
+Die oben vorgegebenen Schritte sind immer gleich, daher kann man das auch automatisieren.
+Zum automatisieren brauchen wir jedoch Tools. Hier war die Überlegung wie folgt:
+\begin{itemize}
+    \item Distincte Daten erstellen: Manuelles Excel filtering
+    \item Daten abspeichern: CSV Format mit Daten: \textbf{Material-Bezeichner}
+    \item Eine Skriptsprache, der die Materialien bearbeitet und ausliest: Python
+    \item Eine Methodik um mit dem LLM zu kommunizieren: OpenAI-API bzw. Wrapper
+    \item Auslesen und abspeichern des Resultats des LLM: CSV Format
+    \item Folgende Daten: \textbf{Material-Bezeichner, Ist UN?, UN-Nr, Klasse}
+\end{itemize}
+
+Kurzgesagt kann man die Daten manuell abspeichern, eine Fragestellung mit jeglichen
+Bezeichnern für das LLM erstellen und die antworten in einer csv abspeichern.
+Das Endresultat sollte dann eine CSV basierte Tabelle ergeben, die wir dann
+letztlich zurück in die Stammdaten einführen können.
+
+Die Inputdaten können wir uns dann nochmal anschauen. Die Liste wäre beispielsweise wie folgt:
+
+\begin{lstlisting}
+REIFENVENTIL
+STECKERGEHAEUSE
+SCAUBSCHUTZKAPPE
+REIFEN 265/40 R19 102V XL ALL SEASON EXT
+REIFEN 265/35 ZR19 98Y XL MI
+REIFEN 255/40 R18 99Y XL CO
+REIFEN 255/35 R19 96Y XL PI
+REIFEN 225/50 R17 94Y MI
+REIFEN 225/50 R17 94Y EXTENDED BS
+REIFEN 235/55 R18 100W EXTENDED BS
+REIFEN 245/45 R17 99Y XL MI
+REIFEN 255/40 ZR20 101Y XL MI
+VENTILMUTTER
+REIFEN 225/45 R18 95Y XL EXTENDED BS
+REIFEN 235/55 R18 100W EXTENDED PI
+REIFEN 275/40 R19 105V XL ALL SEASON EXT
+REIFEN 255/35 R19 96Y XL GY
+GUMMILAGER
+TANKDECKEL
+EINSPRITZDUESE REDUKTIONSADDITIV
+DICHTRING. SONDERFORM
+KUEHLMITTELPUMPE
+\end{lstlisting}
+
+\subsection{Code}
+
+Da wir nun unsere Inputdateien haben, müssen wir diese in unseren Code miteinführen.
+Hierzu haben wir eine ganz einfache Lesemethode.
+
+\begin{lstlisting}
+def main():
+    with open(input\_path, "r", encoding="utf-8") as inputfile:
+    lines = len(inputfile.readlines())
+\end{lstlisting}
+
+Diese Methode zeigt an, wie viele Daten wir verarbeiten müssen.
+Danach lesen wir diese Datei nochmals ein, aber diesmal zum verarbeiten:
+
+\begin{lstlisting}
+with open(input\_path, "r", encoding="utf-8") as inputfile:
+    for raw\_line in inputfile:
+        line = raw\_line.rstrip("\r\n")
+        response = create\_prompt(client, line)
+\end{lstlisting}
+
+Hier ist die Grundlogik wie folgt: Wir lesen eine Zeile aus,
+danach erstellen wir ein Prompt für das LLM und warten auf eine Antwort.
+
+Aber wie schaut \textbf{create\_prompt} überhaupt aus?
+Wir müssen dem LLM genau wie möglich erklären, was wir wollen.
+Sonst kann es zu starken abweichungen in den Resultaten kommen.
+Deswegen erklären wir dem LLM in der Methode, was wir genau möchten.
+
+\begin{lstlisting}
+def create\_prompt(client, material: str) -> str:
+    response = client.responses.create(
+        model="gpt-4o-mini",
+        input=f'Gebe im format "\{material\},UN,UN-Nummer (Die Zahl, z.B. 1234),Klasse (z.B. 2.1)" an,'
+            f'ob es eine UN Nummer und Klasse für folgendes gibt: {material}\n'
+            f'Falls es keine UN Nummer gibt, gebe es so aus:\n'
+            f'\"\{material\},,,\"\n'
+            f'Behalte die Formatierung (Full caps bleibt full caps)'
+    )
+    return response.output\_text
+\end{lstlisting}
+
+Wenn man den oberen Code Snippet betrachtet, benutzen wir den 4o-mini Modell.
+Dieses Modell ist bezeichnet mit "Reasonable and fast". Das heißt, dass das Modell
+denkend agiert. Geeignet für unser Fall, da wir die UN-Nummern
+nicht "Random" generiert bekommen wollen. Es muss ein logisches vorangehen vorhanden sein.
+
+Wenn man den Rest des Codes betrachtet, kann man sehen, dass wir als input folgendes geben:
+\begin{itemize}
+    \item Das Material, was wir bearbeiten wollen.
+    \item Ein Resultat-Text im bestimmten Format: \textbf{Material-Bezeichner, UN, UN-Nummer, Klasse}
+    \item Falls nichts gefunden wird, soll es nur wie folgt ausgegeben werden:
+    \item \textbf{Material-Bezeichner,,,}
+\end{itemize}
+
+Jetzt müssen wir die Daten abspeichern, sodass wir sie später in die Stammdaten wieder
+einführen können. Dafür kann man die eingebaute write Methode von Python nutzen:
+
+\begin{lstlisting}
+with open(output\_path, "a", encoding="utf-8") as outfile:
+    outfile.write(response + "\n")
+\end{lstlisting}
+
+Somit wäre unsere Schleife wie folgt:
+
+\begin{itemize}
+    \item Alle Materialien einlesen
+    \item Reihe für Reihe prompt erstellen
+    \item Reihe für Reihe output abspeichern
+\end{itemize}
+
+\subsection{Output und Probleme}
+
+Als Output haben wir eine CSV Datei, die unsere prompts abgespeichert hat.
+Hier sind einige Beispiele, die automatisch generiert worden sind:
+
+\begin{lstlisting}
+STG VST FAHRPROG GEN3,,,
+STG VST ABG.REING GEN3,,,
+STG VST AMB.LCHT EL.LTG.SATZ 1-FACH,,,
+STG VST BAT.LADEGERAET DC V2.0 STAR3 CHN,,,
+STG VST AMB.LCHT,,,
+STG VST BATLADEGERAET 11KW 7.2KW STAR3,,,
+STG VST BATLADEGERAET 9.6KW STAR3 HV,,,
+\end{lstlisting}
+
+Zu diesen Materialien wurde beispielsweise keine UN-Nummer gefunden und als
+leer gekennzeichnet. Es gibt aber auch Materialien, wozu das LLM etwas finden konnte:
+Beispielsweise:
+
+\begin{lstlisting}
+KRAFTSTOFFBEHAELTER VST,UN,1203,3
+DRUCKMITTELBEHAELTER,UN,2,2.2
+STANDHEIZUNG BENZIN,UN,1234,3
+HINWEISSCHILD HV BATTERIE,UN,3480,9
+\end{lstlisting}
+
+Wenn man den output betrachtet, merkt man schon, dass nicht alles akkurat ist.
+Ein Hinweisschild sollte keine UN Nummer haben, aber da "Batterie" vorhanden ist,
+ist das LLM verwirrt und weist eine UN-Nummer zu.
+
+Hiermit kommen wir auch zu den Problemen: Die LLM ist sehr unvorhersehbar.
+Man hat ein Black-box Problem, da man nicht sehen kann, wie die LLM auf diese Werte
+kommt und das Resultat abliefert.
+
+Die Prompts sind ebenfalls nicht einheitlich, deswegen muss ein Mensch ca. 3000 Zeilen
+nochmals manuell analysieren, ob Fehler vorhanden sind oder nicht.
+Bei einer großen Datenmenge ist das ein Problem, da das menschliche Auge vieles übersehen
+wird.
+Wir benutzen ebenfalls ein klügeres Modell. Obwohl es sich um ein klügeres Modell handelt,
+kriegen wir wie im Beispiel oben, keine gute Gefahrgutanalyse. Es werden sehr wenige
+Objekte als Gefahrgut anerkannt und davon sind nicht mal alle Gefahrgut.
+
+Dazu sind hier ebenfalls ein paar Beispiele:
+
+\begin{lstlisting}
+OELSPRITZDUESE RE,,,"
+"STG VST DBE ASHD NOTRUF IRS,,,"
+"WARTUNGSDECKEL VST,,,,,"
+"ABSCHIRMPLATTE,,,,"
+Es gibt keien UN NUMMER und Klasse dafür.
+Bitte teile mir mit, welche MUTTER. DONDERFORM du meinst, damit ich die INformationen bereitstellen kann.
+ES gibt keien spezifische UN-NUmmer oder Klasse für "TRAEGERPLATTE RE".
+SICHERHEITSGURT LI 3.SITZREIHE,,,"
+\end{lstlisting}
+
+Durch kurze Analyse der Beispiele, die oben gelistet sind, kann man sehen, dass
+Sonderzeichen hinzugefügt worden sind, oder es keine UN Nummer gefunden wird,
+aber anstatt \textbf{Material-Bezeichner,,,}, kriegt man ein Fließtext als Antwort.
+
+Durch dieses Problem kommt man zu verluste an Daten und somit kann man diese Methode
+nicht unbedingt gebrauchbar machen.
+
+\subsection{Mögliche Verbesserungen}
+
+Es gibt auch mögliche weiteren Verbesserungen, die man machen kann, sodass man eine
+LLM eventuell nutzbar machen kann.
+
+Dies wäre durch training mit richtigen Daten. Man kann ein LLM erstellen, der
+als Haupttraining die UN-Nummern hat und lernt, wie man mit diesen umgehen kann.
+Dies würde die "Confidence" des KI deutlich erhöhen, richtige Resultate abzuliefern.
+
+Man kann ebenfalls den Prompt noch detaillierter schreiben, sodass es zu weniger
+Problemen kommen kann.
+
+\subsection{Fazit bezüglich LLM im Zusammenhang zu Gefahrengut}
+
+Auch wenn Gefahrengut mit LLMs identifizierbar sind, sind wir mit unserer jetzigen Technologie,
+bzw. mit den jetzigen Modellen noch weiter entfernt, alles richtig zu identifizieren.
+
+Mit richtigen Tools und richtigem training könnte dies möglich sein, jedoch gibt es solch
+ein Modell nicht im Internet und ebenfalls gibt es nicht viele Große Datensätze,
+womit man solch ein Modell trainieren könnte.
+
+Mit richtigen Datensätzen und richtigen Modellen könnte man in naher Zukunft den
+Einsatz eines LLMs sehen.
